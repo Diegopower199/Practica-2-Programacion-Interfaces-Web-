@@ -131,6 +131,7 @@ type InputProps = {
 
 const InputFormulario = styled.input<InputProps>`
     background-color: ${props => props.error ? "red" : "white"};
+    margin: 10px;
 `
 
 const DivContainerTable = styled.div`
