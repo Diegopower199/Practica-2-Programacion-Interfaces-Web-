@@ -45,24 +45,58 @@ const TablaFormulario = ()  => {
         }
     }
 
-    const addToTable = () => {
-        console.log(nombreError, "\n", dniError, "\n", inicializarNombre, "\n", inicializarDni);
-
-
-        if ((nombreError || dniError) || ((inicializarNombre === false) || (inicializarDni === false))) {
-            console.log("Algun dato esta mal");
-            alert("El nombre o Dni no estan completos y estan incorrectos")
-        }
-
-
-    }
-
 
     return (
         <>
 
 
         <h1>Informacion de personas</h1>
+
+
+
+        <DivFormulario>
+            <DivSepararComponentesFormulario>
+                
+                <ParrafosFormulario>Introdude tu nombre: </ParrafosFormulario> <InputFormulario error={nombreError} id="textoNombre" type="text" placeholder="Nombre" onBlur={(e) => setNombreError(validateNameConError(e.target.value))}
+                onChange={(e) => {
+                    if (nombreError) {
+                        setNombreError(validateNameConError(e.target.value))}
+                        setNombre(e.target.value);
+                    }
+                }/>
+                
+                {nombreError && <>  El nombre es incorrecto</>}
+            </DivSepararComponentesFormulario>
+                
+            <DivSepararComponentesFormulario>
+                <ParrafosFormulario>Introdude tu dni: </ParrafosFormulario> <InputFormulario error={dniError} id="textoDni" type="text" placeholder="Dni" maxLength={9} onBlur={(e) => setDniError(validateDniConError(e.target.value))}
+                onChange={(e) => {
+                    if (dniError) {
+                        setDniError(validateDniConError(e.target.value))}
+                        setDni(e.target.value);
+                    }
+                }/>
+                
+                {dniError && <>  El Dni es incorrecto</>}
+            </DivSepararComponentesFormulario>
+
+            <BotonAdd type="button" onClick={() => {
+
+                if (dniError || nombreError) {
+                    console.log("dni o nombre estan mal puestos");
+                }
+                else {
+                    setListaNombre( [...listaNombre, nombre] );
+                    setListaDni( [...listaDni, dni] );
+
+                    
+                }
+
+                
+            }}>Añadir</BotonAdd>
+
+        </DivFormulario>
+
 
         <DivContainerTable id="tablaInformacion">
 
@@ -72,19 +106,19 @@ const TablaFormulario = ()  => {
             <DivHeader>DNI</DivHeader>
             <DivHeader>Borrar informacion</DivHeader>
 
-            <DivElementosPorColumna>
+            <DivElementosPorColumna sizeArrayMayorQueCero={listaNombre.length > 0}>
             {listaNombre.map((item, index) => (
                 <DivContainerElementos key={index}>{item}</DivContainerElementos>
             ))}
             </DivElementosPorColumna>
-            
-            <DivElementosPorColumna>
+
+            <DivElementosPorColumna sizeArrayMayorQueCero={listaDni.length > 0}>
             {listaDni.map((item, index) => (
                 <DivContainerElementos key={index}>{item}</DivContainerElementos>
             ))}
             </DivElementosPorColumna>
 
-            <DivElementosPorColumna>
+            <DivElementosPorColumna sizeArrayMayorQueCero={listaNombre.length > 0}>
             {listaNombre.map((item, index) => (
                 <DivContainerElementos>
                 <Image src="/Imagenes/papelera.jpg" alt="una foto" width={30} height={18} onClick={() => {
@@ -95,68 +129,27 @@ const TablaFormulario = ()  => {
             ))}
             </DivElementosPorColumna>
 
-
-            
-
             
             
             
         </DivContainerTable>
 
-
-        
-        <DivFormulario>
-            <DivSepararComponentesFormulario>
-                Introdude tu nombre: <InputFormulario id="textoNombre" type="text" placeholder="Nombre" onBlur={(e) => setNombreError(validateNameConError(e.target.value))}
-                onChange={(e) => {
-                    if (nombreError) {
-                        console.log(nombreError)
-                        setNombreError(validateNameConError(e.target.value))}
-                        setNombre(e.target.value);
-                    }
-                }/>
-                
-                {nombreError && <>  El nombre es incorrecto</>}
-            </DivSepararComponentesFormulario>
-                
-            <DivSepararComponentesFormulario>
-                Introdude tu dni: <InputFormulario id="textoDni" type="text" placeholder="Dni" maxLength={9} onBlur={(e) => setDniError(validateDniConError(e.target.value))}
-                onChange={(e) => {
-                    if (dniError) {
-                        console.log(dniError)
-                        setDniError(validateDniConError(e.target.value))}
-                        setDni(e.target.value);
-                    }
-                }/>
-                
-                {dniError && <>  El Dni es incorrecto</>}
-            </DivSepararComponentesFormulario>
-
-            <BotonAdd type="button" onClick={() => {
-                setListaNombre( [...listaNombre, nombre] );
-                setListaDni( [...listaDni, dni] );
-                console.log("hola");
-            }}>Añadir a la tabla estos valores</BotonAdd>
-
-        </DivFormulario>
-
-                <h3>Nombre Error: {nombreError ? "True" : "False"}</h3>
-                <h3>Dni Error: {dniError ? "True" : "False"}</h3>
-                <h3>Inicializar nombre: {inicializarNombre ? "True" : "False"}</h3>
-                <h3>Inicializar Dni: {inicializarDni ? "True" : "False"}</h3>
         </>
     )
 }
 
-const InputFormulario = styled.input`
-    background-color: white;
+type InputProps = {
+    error: boolean
+}
+
+const InputFormulario = styled.input<InputProps>`
+    background-color: ${props => props.error ? "red" : "white"};
 `
 
 const DivContainerTable = styled.div`
     background-color: white;
     margin: 50px auto;
-    box-shadow: 0 0 20px #333;
-    border: 3px solid black;
+    box-shadow: 0 0 30px #333;
 
 
     width: 1650px;
@@ -192,25 +185,31 @@ const DivHeader = styled.div`
     background-color: rgba(208, 31, 31, 1);
 `
 
-const DivElementosPorColumna = styled.div`
-    display: flex;
-    flex-direction: column;
-    background-color: pink;
-    
+type DivTieneContenidoProps = {
+    sizeArrayMayorQueCero: boolean
+}
 
+const DivElementosPorColumna = styled.div<DivTieneContenidoProps>`
+    display: ${props => props.sizeArrayMayorQueCero ? "flex" : "none"};
+    flex-direction: column;
+    border: 1 px solid black;
 `
 
 const DivContainerElementos = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-direction: column;
 
-    background-color: yellow;
+    background-color: #ffee00c0;
 
-    height: 50px;
+    height: 55px;
     width: 524px;
     font-size: 16px;
-    padding: 10px;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    padding-left: 10px;
+    padding-right: 10px;
     border: 3px solid black;
 `
 
@@ -246,8 +245,12 @@ const BotonAdd = styled.button`
     outline: none;
     border-radius: 5px;
     border: 2px solid #212529;
-    background: #212529;
-        
+    background: #212529;       
+`
+
+const ParrafosFormulario = styled.p`
+    font-weight: 15px;
+    font-weight: bolder;
 `
 
 
