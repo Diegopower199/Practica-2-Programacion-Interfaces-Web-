@@ -16,13 +16,7 @@ const TablaFormulario = ()  => {
     const [listaDni, setListaDni] = useState<string[]>([]);
 
 
-    let inicializarNombre: boolean = false;
-    let inicializarDni: boolean = false;
-
     const validateNameConError = (name: string) : boolean => {
-        console.log(name);
-        inicializarNombre = true;
-        console.log("inicializarNombre: ", inicializarNombre, " \n\ninicializarDni: ", inicializarDni)
         if (/^([A-ZÁÉÍÓÚ]{1}[a-zñáéíóú]+[\s]*)+$/.test(name)) {
             return false;
         }
@@ -33,10 +27,6 @@ const TablaFormulario = ()  => {
 
 
     const validateDniConError = (dni: string) : boolean => {
-        const validDni = "/^[0-9]{8}[BCDFGHJKLMNPRSTVWXYZ]{1}$/";
-        inicializarDni = true;
-        console.log("validateDniConError\ninicializarNombre: ", inicializarNombre, " \n\ninicializarDni: ", inicializarDni, "\n")
-
         if (/^[0-9]{8}[BCDFGHJKLMNPRSTVWXYZ]{1}$/.test(dni)) {
             return false;
         }
@@ -89,7 +79,7 @@ const TablaFormulario = ()  => {
                     setListaNombre( [...listaNombre, nombre] );
                     setListaDni( [...listaDni, dni] );
 
-                    
+
                 }
 
                 
@@ -107,30 +97,27 @@ const TablaFormulario = ()  => {
             <DivHeader>Borrar informacion</DivHeader>
 
             <DivElementosPorColumna sizeArrayMayorQueCero={listaNombre.length > 0}>
-            {listaNombre.map((item, index) => (
-                <DivContainerElementos key={index}>{item}</DivContainerElementos>
-            ))}
+                {listaNombre.map((item, index) => (
+                    <DivContainerElementos key={index}>{item}</DivContainerElementos>
+                ))}
             </DivElementosPorColumna>
 
             <DivElementosPorColumna sizeArrayMayorQueCero={listaDni.length > 0}>
-            {listaDni.map((item, index) => (
-                <DivContainerElementos key={index}>{item}</DivContainerElementos>
-            ))}
+                {listaDni.map((item, index) => (
+                    <DivContainerElementos key={index}>{item}</DivContainerElementos>
+                ))}
             </DivElementosPorColumna>
 
             <DivElementosPorColumna sizeArrayMayorQueCero={listaNombre.length > 0}>
-            {listaNombre.map((item, index) => (
-                <DivContainerElementos>
-                <Image src="/Imagenes/papelera.jpg" alt="una foto" width={30} height={18} onClick={() => {
-                setListaDni(listaDni.filter((_, i) => i !== index));
-                setListaNombre(listaNombre.filter((_, i) => i !== index));
-                }}></Image>
-                </DivContainerElementos>
-            ))}
+                {listaNombre.map((item, index) => (
+                    <DivContainerElementos>
+                        <Image src="/Imagenes/papelera.jpg" alt="una foto" width={30} height={18} onClick={() => {
+                            setListaDni(listaDni.filter((_, i) => i !== index));
+                            setListaNombre(listaNombre.filter((_, i) => i !== index));
+                        }}></Image>
+                    </DivContainerElementos>
+                ))}
             </DivElementosPorColumna>
-
-            
-            
             
         </DivContainerTable>
 
